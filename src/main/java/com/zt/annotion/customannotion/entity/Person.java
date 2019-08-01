@@ -1,0 +1,25 @@
+package com.zt.annotion.customannotion.entity;
+
+import com.zt.annotion.customannotion.Enums.SensitiveType;
+import com.zt.annotion.customannotion.annotion.CheckMatch;
+import com.zt.annotion.customannotion.annotion.SensitiveInfo;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * 功能描述:
+ *
+ * @author: MR.zt
+ * @date: 2019/7/31 11:50
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Person {
+    private String name;
+    private Integer age;
+    @CheckMatch
+    @SensitiveInfo(SensitiveType.ID_CARD)
+    private String idCard;
+}
