@@ -85,6 +85,7 @@ public class RequiredParamAspect {
                 Annotation annotation = annotations[i][j];
                 Object object =  params[i];
                 if (annotation instanceof CheckParam) {
+                    CheckParam checkParam = (CheckParam) annotation;
                     if (object == null) {
                         throw new BusinessException(CodeEnum.PARAMS_IS_INVALID, "参数:" + argsName[i] + "不能为空对象!!!");
                     }
@@ -98,17 +99,14 @@ public class RequiredParamAspect {
                     }
                     //集合
                     else if (object instanceof Collection) {
-                        CheckParam checkParam = (CheckParam) annotation;
                         checkCollection((Collection) object, argsName[i], checkParam.attributes());
                     }
                     //Map
                     else if (object instanceof Map) {
-                        CheckParam checkParam = (CheckParam) annotation;
                         checkMap((Map) object, argsName[i], checkParam.attributes());
                     }
                     //普通对象
                     else if (object instanceof Object) {
-                        CheckParam checkParam = (CheckParam) annotation;
                         checkObject(object,argsName[i], checkParam.attributes());
                     }
                 }
