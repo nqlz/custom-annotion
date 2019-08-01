@@ -2,6 +2,7 @@ package com.zt.annotion.customannotion.entity;
 
 import com.zt.annotion.customannotion.Enums.SensitiveType;
 import com.zt.annotion.customannotion.annotion.CheckMatch;
+import com.zt.annotion.customannotion.annotion.CheckParam;
 import com.zt.annotion.customannotion.annotion.SensitiveInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +18,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Person {
+    @CheckParam
     private String name;
+    @CheckParam
     private Integer age;
     @CheckMatch
     @SensitiveInfo(SensitiveType.ID_CARD)

@@ -23,6 +23,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 功能描述:AOP切面校验类
@@ -84,7 +85,7 @@ public class RequiredParamAspect {
         for (int i = 0; i < annotations.length; i++) {
             for (int j = 0; j < annotations[i].length; j++) {
                 Annotation annotation = annotations[i][j];
-                Object object =  params[i];
+                Object object = params[i];
                 if (annotation instanceof CheckParam) {
                     CheckParam checkParam = (CheckParam) annotation;
                     if (object == null) {
@@ -108,12 +109,11 @@ public class RequiredParamAspect {
                     }
                     //普通对象
                     else if (object instanceof Object) {
-                        checkObject(object,argsName[i], checkParam.attributes());
+                        checkObject(object, argsName[i], checkParam.attributes());
                     }
-                }
-                else if (annotation instanceof CheckMatch){
+                } else if (annotation instanceof CheckMatch) {
                     CheckMatch check = (CheckMatch) annotation;
-                    doCheckMatch(check,object,argsName[i]);
+                    doCheckMatch(check, object, argsName[i]);
                 }
             }
         }
@@ -121,12 +121,17 @@ public class RequiredParamAspect {
 
     /**
      * 正则参数校验
+     *
      * @param check
      * @param object
      * @param argName
      */
-    private void doCheckMatch(CheckMatch check, Object object,String argName) {
-        if (!check.expression().match(object)) {
+    private void doCheckMatch(CheckMatch check, Object object, String argName) {
+        Object o = Optional
+                .ofNullable(object)
+                .orElseThrow(() -> new BusinessException(CodeEnum.PARAMS_IS_INVALID, "正则参数:" + argName + "不能为空!!!"));
+
+        if (!check.expression().match(o)) {
             throw new BusinessException(CodeEnum.PARAMS_IS_INVALID, "正则参数:" + argName + "格式不合法!!!");
         }
     }
@@ -225,7 +230,7 @@ public class RequiredParamAspect {
      * @param argName
      * @param attributes
      */
-    private  void checkObject(Object object, String argName, String[] attributes) {
+    private void checkObject(Object object, String argName, String[] attributes) {
         Field[] fields = object.getClass().getDeclaredFields();
         for (Field field : fields) {
             CheckParam param = field.getAnnotation(CheckParam.class);
@@ -239,14 +244,18 @@ public class RequiredParamAspect {
             }
             //成员变量有注解，先校验注解,成员变量只校验字符串，和基本数据类型
             String fieldName = field.getName();
-            if(param!=null){
+            if (param != null) {
                 boolean str = field.getType().equals(String.class);
                 boolean num = field.getType().equals(Number.class);
-                if (str){checkString(o.toString(), fieldName);}
-                if (num){checkNumber(Integer.valueOf(o.toString()), fieldName);}
+                if (str) {
+                    checkString(o.toString(), fieldName);
+                }
+                if (num) {
+                    checkNumber(Integer.valueOf(o.toString()), fieldName);
+                }
             }
-            if(match!=null){
-                doCheckMatch(match,o, fieldName);
+            if (match != null) {
+                doCheckMatch(match, o, fieldName);
             }
         }
         if (attributes.length == 0) {

@@ -29,7 +29,7 @@ public class TestAnnotion {
     }
     @RequestMapping("/obj")
     @ValidateServiceData
-    public ResultJson testObject(@CheckParam(attributes = {"name","age","idCard"}) Person person){
+    public ResultJson testObject(@CheckParam Person person){
         log.info(person.getName()+":"+person.getAge());
         return ResultJson.returnOK("成功了");
     }

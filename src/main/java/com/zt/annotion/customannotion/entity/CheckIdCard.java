@@ -4,14 +4,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @Auther: zoutao
+ * @Author: zoutao
  * @Date: 2018/11/21 10:47
  * @Description:身份证号校验工具类
  */
 public class CheckIdCard {
+    private static Pattern pattern = Pattern.compile("[\u4e00-\u9fa5]");
     public static final Boolean checkIdCard(String idCard) {
         // 检测身份证是否包含中文
-        Pattern pattern = Pattern.compile("[\u4e00-\u9fa5]");
         Matcher aMatcher = pattern.matcher(idCard);
         boolean isZH = aMatcher.find();
 
