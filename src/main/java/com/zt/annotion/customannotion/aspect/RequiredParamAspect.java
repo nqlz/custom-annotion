@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zt.annotion.customannotion.Enums.CodeEnum;
+import com.zt.annotion.customannotion.Enums.MatchEnum;
 import com.zt.annotion.customannotion.annotion.CheckMatch;
 import com.zt.annotion.customannotion.annotion.CheckParam;
 import com.zt.annotion.customannotion.annotion.ValidateServiceData;
@@ -131,16 +132,17 @@ public class RequiredParamAspect {
         Object o = Optional
                 .ofNullable(object)
                 .orElseThrow(() -> new BusinessException(CodeEnum.PARAMS_IS_INVALID, "正则参数:" + argName + "不能为空!!!"));
-        Object targetObj = o;
-
+        Boolean match;
         if (check.isMatch()) {
             String expression = check.expression();
             Map tg = CollUtil.newHashMap();
             tg.put("regex", expression);
             tg.put("value", o);
-            targetObj=tg;
+            match = MatchEnum.MactchRegex.match(tg);
+        }else {
+            match = check.matchType().match(o);
         }
-        Boolean match = check.matchType().match(targetObj);
+
         if(!match){
             throw new BusinessException(CodeEnum.PARAMS_IS_INVALID, "正则参数:" + argName + "格式不合法!!!");
         }
