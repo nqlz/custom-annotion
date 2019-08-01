@@ -9,6 +9,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 /**
+ * @author cover 杨乙伟
  * @Description: 通用校验逻辑封装
  */
 public class CommonValidate {

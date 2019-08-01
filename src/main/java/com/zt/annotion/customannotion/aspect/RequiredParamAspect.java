@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * 功能描述:AOP切面校验类
  *
- * @author: MR.zt
+ * @author: cover 杨乙伟
  * @date: 2019/7/30 9:55
  */
 @Aspect
@@ -80,6 +80,7 @@ public class RequiredParamAspect {
      */
     private void validateCheckParam(Method method, String[] argsName, Object[] params) {
         Annotation[][] annotations = method.getParameterAnnotations();
+        //只对参数加了相应注解的参数校验，未加注解参数若是普通对象，即使成员变量有注解也不参加校验
         for (int i = 0; i < annotations.length; i++) {
             for (int j = 0; j < annotations[i].length; j++) {
                 Annotation annotation = annotations[i][j];
@@ -118,6 +119,12 @@ public class RequiredParamAspect {
         }
     }
 
+    /**
+     * 正则参数校验
+     * @param check
+     * @param object
+     * @param argName
+     */
     private void doCheckMatch(CheckMatch check, Object object,String argName) {
         if (!check.expression().match(object)) {
             throw new BusinessException(CodeEnum.PARAMS_IS_INVALID, "正则参数:" + argName + "格式不合法!!!");
