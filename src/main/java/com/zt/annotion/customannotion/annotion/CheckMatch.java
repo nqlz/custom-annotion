@@ -28,5 +28,9 @@ public @interface CheckMatch {
      */
     MatchEnum matchType() default MatchEnum.Identity;
 
+    /**
+     * 正则表达式
+     * @return
+     */
     String expression() default "";
 }

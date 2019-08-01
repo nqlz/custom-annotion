@@ -138,7 +138,7 @@ public class RequiredParamAspect {
             Map tg = CollUtil.newHashMap();
             tg.put("regex", expression);
             tg.put("value", o);
-            match = MatchEnum.MactchRegex.match(tg);
+            match = MatchEnum.MatchRegex.match(tg);
         }else {
             match = check.matchType().match(o);
         }

@@ -26,19 +26,28 @@ public enum MatchEnum {
             return Validator.isCitizenId(obj.toString());
         }
     },
+    /**
+     * 邮箱校验
+     */
     Email{
         @Override
         public Boolean match(Object obj) {
             return Validator.isEmail(obj.toString());
         }
     },
+    /**
+     * 手机号校验
+     */
     Mobile{
         @Override
         public Boolean match(Object obj) {
             return Validator.isMobile(obj.toString());
         }
     },
-    MactchRegex{
+    /**
+     * 自定义正则校验
+     */
+    MatchRegex {
         @Override
         public Boolean match(Object obj) {
             Map o=(Map)obj;
