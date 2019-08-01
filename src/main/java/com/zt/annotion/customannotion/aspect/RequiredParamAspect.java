@@ -231,34 +231,35 @@ public class RequiredParamAspect {
      * @param attributes
      */
     private void checkObject(Object object, String argName, String[] attributes) {
-        Field[] fields = object.getClass().getDeclaredFields();
-        for (Field field : fields) {
-            CheckParam param = field.getAnnotation(CheckParam.class);
-            CheckMatch match = field.getAnnotation(CheckMatch.class);
-            field.setAccessible(true);
-            Object o = null;
-            try {
-                o = field.get(object);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            //成员变量有注解，先校验注解,成员变量只校验字符串，和基本数据类型
-            String fieldName = field.getName();
-            if (param != null) {
-                boolean str = field.getType().equals(String.class);
-                boolean num = field.getType().equals(Number.class);
-                if (str) {
-                    checkString(o.toString(), fieldName);
-                }
-                if (num) {
-                    checkNumber(Integer.valueOf(o.toString()), fieldName);
-                }
-            }
-            if (match != null) {
-                doCheckMatch(match, o, fieldName);
-            }
-        }
+        //如果attributes上有属性，默认不校验成员变量上的注解成员
         if (attributes.length == 0) {
+            Field[] fields = object.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                CheckParam param = field.getAnnotation(CheckParam.class);
+                CheckMatch match = field.getAnnotation(CheckMatch.class);
+                field.setAccessible(true);
+                Object o = null;
+                try {
+                    o = field.get(object);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                //成员变量有注解，先校验注解,成员变量只校验字符串，和基本数据类型
+                String fieldName = field.getName();
+                if (param != null) {
+                    boolean str = field.getType().equals(String.class);
+                    boolean num = field.getType().equals(Number.class);
+                    if (str) {
+                        checkString(o.toString(), fieldName);
+                    }
+                    if (num) {
+                        checkNumber(Integer.valueOf(o.toString()), fieldName);
+                    }
+                }
+                if (match != null) {
+                    doCheckMatch(match, o, fieldName);
+                }
+            }
             return;
         }
         if (!CommonValidate.checkObject2JSON(object)) {
