@@ -3,6 +3,7 @@ package com.zt.annotion.customannotion.test;
 import com.zt.annotion.customannotion.Enums.MatchEnum;
 import com.zt.annotion.customannotion.annotion.CheckMatch;
 import com.zt.annotion.customannotion.annotion.CheckParam;
+import com.zt.annotion.customannotion.annotion.GlobalLock;
 import com.zt.annotion.customannotion.annotion.ValidateServiceData;
 import com.zt.annotion.customannotion.entity.Person;
 import com.zt.annotion.customannotion.entity.ResultJson;
@@ -36,7 +37,7 @@ public class TestAnnotion {
 
     @RequestMapping("/match")
     @ValidateServiceData
-    public ResultJson testMatch(@CheckMatch(expression = MatchEnum.identity) String idcard){
+    public ResultJson testMatch(@CheckMatch(matchType = MatchEnum.Identity) String idcard){
         log.info(idcard);
         return ResultJson.returnOK("成功了");
     }
@@ -44,5 +45,15 @@ public class TestAnnotion {
     public ResultJson testSensitive(){
         Person ps = new Person("张三", 78, "533526199506040218");
         return ResultJson.returnOK(ps,"成功了");
+    }
+    @RequestMapping("/lock")
+    @GlobalLock(key = {"#person.name","#person.age"},waitTime = 2, leaseTime = 120)
+    public ResultJson testglobalLock(Person person){
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return ResultJson.returnOK("完美","成功了");
     }
 }

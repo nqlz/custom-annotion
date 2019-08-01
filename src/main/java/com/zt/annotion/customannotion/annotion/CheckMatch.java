@@ -12,17 +12,21 @@ import java.lang.annotation.*;
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD,ElementType.PARAMETER,ElementType.FIELD})
+@Target({ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD})
 public @interface CheckMatch {
     /**
-     * 是否开启正则校验
+     * 是否开启自定义正则校验,开启后matchType方式将失效
+     *
      * @return
      */
-    boolean isMatch() default true;
+    boolean isMatch() default false;
 
     /**
      * 正则校验方式
+     *
      * @return
      */
-    MatchEnum expression() default MatchEnum.identity;
+    MatchEnum matchType() default MatchEnum.Identity;
+
+    String expression() default "";
 }

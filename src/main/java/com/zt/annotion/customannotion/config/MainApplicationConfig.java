@@ -1,5 +1,6 @@
 package com.zt.annotion.customannotion.config;
 
+import com.zt.annotion.customannotion.annotion.EnableGlobalLock;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,5 +14,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan(basePackages="com.zt.annotion.customannotion")
 @EnableCaching
+@EnableGlobalLock
 public class MainApplicationConfig {
 }
