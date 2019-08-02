@@ -1,5 +1,6 @@
 package com.zt.annotion.customannotion.entity;
 
+import com.zt.annotion.customannotion.Enums.MatchEnum;
 import com.zt.annotion.customannotion.Enums.SensitiveType;
 import com.zt.annotion.customannotion.annotion.CheckMatch;
 import com.zt.annotion.customannotion.annotion.CheckParam;
@@ -22,7 +23,7 @@ public class Person {
     private String name;
     @CheckParam
     private Integer age;
-    @CheckMatch
+    @CheckMatch(matchType = MatchEnum.Identity)
     @SensitiveInfo(SensitiveType.ID_CARD)
     private String idCard;
 }

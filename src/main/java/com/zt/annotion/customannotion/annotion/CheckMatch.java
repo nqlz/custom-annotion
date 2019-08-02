@@ -22,6 +22,12 @@ public @interface CheckMatch {
     boolean isMatch() default false;
 
     /**
+     * 字段是否必须验证，null或空串
+     * @return
+     */
+    boolean required() default true;
+
+    /**
      * 正则校验方式
      *
      * @return

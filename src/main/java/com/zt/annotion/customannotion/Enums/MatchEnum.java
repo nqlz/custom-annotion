@@ -23,7 +23,7 @@ public enum MatchEnum {
     Identity{
         @Override
         public Boolean match(Object obj) {
-            return Validator.isCitizenId(obj.toString());
+            return CheckIdCard.checkIdCard(obj.toString());
         }
     },
     /**

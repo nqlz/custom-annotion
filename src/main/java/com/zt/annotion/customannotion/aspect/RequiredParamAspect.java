@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * 功能描述:AOP切面校验类
@@ -129,21 +130,23 @@ public class RequiredParamAspect {
      * @param argName
      */
     private void doCheckMatch(CheckMatch check, Object object, String argName) {
-        Object o = Optional
-                .ofNullable(object)
-                .orElseThrow(() -> new BusinessException(CodeEnum.PARAMS_IS_INVALID, "正则参数:" + argName + "不能为空!!!"));
+        Optional<Object> o = Optional
+                .ofNullable(object);
+        if (check.isMatch()) {
+            o.orElseThrow(() -> new BusinessException(CodeEnum.PARAMS_IS_INVALID, "正则参数:" + argName + "不能为空!!!"));
+        }
         Boolean match;
         if (check.isMatch()) {
             String expression = check.expression();
             Map tg = CollUtil.newHashMap();
             tg.put("regex", expression);
-            tg.put("value", o);
+            tg.put("value", o.get());
             match = MatchEnum.MatchRegex.match(tg);
-        }else {
-            match = check.matchType().match(o);
+        } else {
+            match = check.matchType().match(o.get());
         }
 
-        if(!match){
+        if (!match) {
             throw new BusinessException(CodeEnum.PARAMS_IS_INVALID, "正则参数:" + argName + "格式不合法!!!");
         }
     }
@@ -251,14 +254,19 @@ public class RequiredParamAspect {
                 CheckMatch match = field.getAnnotation(CheckMatch.class);
                 field.setAccessible(true);
                 Object o = null;
+                //成员变量有注解，先校验注解,成员变量只校验字符串，和基本数据类型
+                String fieldName = field.getName();
+                Optional<Object> fieldObj = null;
                 try {
-                    o = field.get(object);
+                    fieldObj = Optional
+                            .ofNullable(field.get(object));
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
-                //成员变量有注解，先校验注解,成员变量只校验字符串，和基本数据类型
-                String fieldName = field.getName();
+
+                Supplier<BusinessException> businessExceptionSupplier = () -> new BusinessException(CodeEnum.PARAMS_IS_INVALID, "参数:" + fieldName + "不能为空!!!");
                 if (param != null) {
+                    o = fieldObj.orElseThrow(businessExceptionSupplier);
                     boolean str = field.getType().equals(String.class);
                     boolean num = field.getType().equals(Number.class);
                     if (str) {
@@ -269,7 +277,15 @@ public class RequiredParamAspect {
                     }
                 }
                 if (match != null) {
-                    doCheckMatch(match, o, fieldName);
+                    //必须字段，则验证其是否为null
+                    if (match.required()) {
+                        o = fieldObj.orElseThrow(businessExceptionSupplier);
+                        doCheckMatch(match, o, fieldName);
+                    }
+                    //非必须时，验证其是否需要校验
+                    else if (fieldObj.isPresent()) {
+                        doCheckMatch(match, fieldObj.get(), fieldName);
+                    }
                 }
             }
             return;
