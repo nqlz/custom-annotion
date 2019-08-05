@@ -277,7 +277,7 @@ public class RequiredParamAspect {
                 if (param != null) {
                     o = fieldObj.orElseThrow(businessExceptionSupplier);
                     boolean str = field.getType().equals(String.class);
-                    boolean num = field.getType().equals(Number.class);
+                    boolean num = Number.class.isAssignableFrom(field.getType());
                     if (str) {
                         checkString(o.toString(), fieldName);
                     }
