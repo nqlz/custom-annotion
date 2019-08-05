@@ -1,6 +1,7 @@
 package com.zt.annotion.customannotion.aspect;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.convert.Convert;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zt.annotion.customannotion.Enums.CodeEnum;
@@ -24,6 +25,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -100,7 +102,7 @@ public class RequiredParamAspect {
                     }
                     //基本数据类型以及包装数据类
                     else if (object instanceof Number) {
-                        checkNumber((Number) object, argsName[i]);
+                        checkNumber((Number) object, argsName[i],checkParam);
                     }
                     //集合
                     else if (object instanceof Collection) {
@@ -169,8 +171,15 @@ public class RequiredParamAspect {
      * @param number  基本数据
      * @param argName 参数名
      */
-    private void checkNumber(Number number, String argName) {
+    private void checkNumber(Number number, String argName,CheckParam param) {
         //啥也不干 也可以校验是否为0
+        String[] attributes = param.attributes();
+        if(attributes.length>0){
+            List<String> objects = (List<String>) Convert.toList(attributes);
+            if(!objects.contains(number.toString())){
+                throw new BusinessException(CodeEnum.PARAMS_IS_INVALID, "参数:" + argName + "范围不合法!!!");
+            }
+        }
     }
 
     /**
@@ -273,7 +282,7 @@ public class RequiredParamAspect {
                         checkString(o.toString(), fieldName);
                     }
                     if (num) {
-                        checkNumber(Integer.valueOf(o.toString()), fieldName);
+                        checkNumber(Integer.valueOf(o.toString()), fieldName,param);
                     }
                 }
                 if (match != null) {
