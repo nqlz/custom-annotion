@@ -1,8 +1,7 @@
 package com.zt.annotion.customannotion.config;
 
 import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -16,14 +15,19 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * @Date 19-7-10 下午5:43
  */
 @Configuration
-public class RedisConfig {
+@EnableCaching
+public class RedisConfig   {
 
-    @Autowired
-    private RedisConnectionFactory connectionFactory;
 
+    /**
+     * retemplate相关配置
+     *
+     * @return
+     */
     @Bean
-    public RedisTemplate<String, String> redisTemplate() {
-        StringRedisTemplate redisTemplate = new StringRedisTemplate();
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(connectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());

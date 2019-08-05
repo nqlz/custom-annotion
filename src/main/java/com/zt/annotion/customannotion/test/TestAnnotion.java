@@ -1,10 +1,7 @@
 package com.zt.annotion.customannotion.test;
 
 import com.zt.annotion.customannotion.Enums.MatchEnum;
-import com.zt.annotion.customannotion.annotion.CheckMatch;
-import com.zt.annotion.customannotion.annotion.CheckParam;
-import com.zt.annotion.customannotion.annotion.GlobalLock;
-import com.zt.annotion.customannotion.annotion.ValidateServiceData;
+import com.zt.annotion.customannotion.annotion.*;
 import com.zt.annotion.customannotion.entity.Person;
 import com.zt.annotion.customannotion.entity.ResultJson;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +39,13 @@ public class TestAnnotion {
         return ResultJson.returnOK("成功了");
     }
     @RequestMapping("/sensitive")
+    @RepeatSubmitLimiter
     public ResultJson testSensitive(){
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Person ps = new Person("张三", 78, "533526199506040218");
         return ResultJson.returnOK(ps,"成功了");
     }
