@@ -1,6 +1,6 @@
 package com.zt.annotion.customannotion.exception;
 
-import com.zt.annotion.customannotion.Enums.CodeEnum;
+import com.zt.annotion.customannotion.enums.CodeEnum;
 import lombok.Data;
 
 /**

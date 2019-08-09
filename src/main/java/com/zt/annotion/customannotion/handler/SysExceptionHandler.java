@@ -1,7 +1,7 @@
 package com.zt.annotion.customannotion.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.zt.annotion.customannotion.Enums.CodeEnum;
+import com.zt.annotion.customannotion.enums.CodeEnum;
 import com.zt.annotion.customannotion.entity.ResultJson;
 import com.zt.annotion.customannotion.exception.BusinessException;
 import com.zt.annotion.customannotion.exception.SysIllegalArgumentException;

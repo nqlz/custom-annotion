@@ -1,4 +1,4 @@
-package com.zt.annotion.customannotion.Enums;
+package com.zt.annotion.customannotion.enums;
 
 
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.zt.annotion.customannotion.Enums;
+package com.zt.annotion.customannotion.enums;
 
 /**
  * 功能描述:脱敏类型枚举类

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
-import com.zt.annotion.customannotion.Enums.SensitiveType;
+import com.zt.annotion.customannotion.enums.SensitiveType;
 import com.zt.annotion.customannotion.annotion.SensitiveInfo;
 
 import java.io.IOException;

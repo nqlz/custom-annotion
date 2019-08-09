@@ -1,7 +1,9 @@
-package com.zt.annotion.customannotion.enums;
+package com.zt.annotion.customannotion.Enums;
 
 import cn.hutool.core.lang.Validator;
 import com.zt.annotion.customannotion.entity.CheckIdCard;
+import com.zt.annotion.customannotion.entity.ResultJson;
+import lombok.Data;
 import lombok.Getter;
 
 import java.util.Map;

@@ -2,7 +2,7 @@ package com.zt.annotion.customannotion.entity;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.zt.annotion.customannotion.Enums.CodeEnum;
+import com.zt.annotion.customannotion.enums.CodeEnum;
 import lombok.Data;
 
 import java.util.Optional;

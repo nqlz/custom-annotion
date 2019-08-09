@@ -1,6 +1,6 @@
 package com.zt.annotion.customannotion.annotion;
 
-import com.zt.annotion.customannotion.Enums.MatchEnum;
+import com.zt.annotion.customannotion.enums.MatchEnum;
 
 import java.lang.annotation.*;
 
