@@ -28,7 +28,7 @@ public class CommonJoinPointOperation {
             try {
                 method = joinPoint.getTarget().getClass().getMethod(signature.getName(), method.getParameterTypes());
             } catch (Exception e) {
-                log.error("lockPoint getMethod", e);
+                log.error("lockPoint getMethod", e.getMessage());
             }
         }
         return method;
