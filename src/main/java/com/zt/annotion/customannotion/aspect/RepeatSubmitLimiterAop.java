@@ -50,14 +50,13 @@ public class RepeatSubmitLimiterAop {
         String remoteAddr = request.getRemoteAddr();
         Object arg = proceedingJoinPoint.getArgs()[0];
         String reqId = className + "_" + methodName + "_" + remoteAddr + "_" + arg.toString();
-        int hashCode = Math.abs(reqId.hashCode());
         if (StringUtils.isEmpty(reqId)) {
             log.warn("请不要重复提交请求....!!!");
             throw new BusinessException(CodeEnum.REPEAT_OPERATOR, "请不要重复提交!");
         }
         RepeatSubmitLimiter limiter = method.getAnnotation(RepeatSubmitLimiter.class);
         // 获取对应的reqId,如果能够获取该reqId，就直接执行具体的业务逻辑
-        boolean isFind = delReqId(hashCode, limiter);
+        boolean isFind = delReqId(reqId, limiter);
         // 获取对应的reqId,如果获取不到该reqId 直接返回请勿重复提交
         if (!isFind) {
             log.warn("请不要重复提交请求....!!!");
@@ -72,18 +71,17 @@ public class RepeatSubmitLimiterAop {
     }
 
 
-    public boolean delReqId(Integer reqIdKey, RepeatSubmitLimiter limiter) {
+    public boolean delReqId(String reqIdKey, RepeatSubmitLimiter limiter) {
         //第二次请求 不做处理
-        String key = String.valueOf(reqIdKey);
         long timeout = limiter.timeout();
         if (timeout < 0) {
             timeout = 3000;
         }
-        String value = (String) redisTemplate.opsForValue().get(key);
+        String value = (String) redisTemplate.opsForValue().get(reqIdKey);
         if (StringUtils.isNotBlank(value)) {
             return false;
         }
-        redisTemplate.opsForValue().set(key, IdUtil.randomUUID(), timeout, limiter.timeUnit());
+        redisTemplate.opsForValue().set(reqIdKey, IdUtil.randomUUID(), timeout, limiter.timeUnit());
         return true;
     }
 
