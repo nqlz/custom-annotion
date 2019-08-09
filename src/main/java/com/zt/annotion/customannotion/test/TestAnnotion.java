@@ -5,8 +5,10 @@ import com.zt.annotion.customannotion.annotion.*;
 import com.zt.annotion.customannotion.entity.Person;
 import com.zt.annotion.customannotion.entity.ResultJson;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * 功能描述:
@@ -19,10 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class TestAnnotion {
 
+    @Autowired
+    private RestTemplate restTemplate;
+
     @RequestMapping("/param")
     @ValidateServiceData
     public ResultJson testParam(@CheckParam String name, @CheckParam Integer age ){
         log.info(name+":"+age);
+        log.info(restTemplate.toString());
         return ResultJson.returnOK("成功了");
     }
     @RequestMapping("/obj")

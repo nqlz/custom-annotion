@@ -282,7 +282,7 @@ public class RequiredParamAspect {
                         checkString(o.toString(), fieldName);
                     }
                     if (num) {
-                        checkNumber(Integer.valueOf(o.toString()), fieldName,param);
+                        checkNumber((Number)o, fieldName,param);
                     }
                 }
                 if (match != null) {
@@ -291,7 +291,7 @@ public class RequiredParamAspect {
                         o = fieldObj.orElseThrow(businessExceptionSupplier);
                         doCheckMatch(match, o, fieldName);
                     }
-                    //非必须时，验证其是否需要校验
+                    //非必须时，只验证其是否需要校验
                     else if (fieldObj.isPresent()) {
                         doCheckMatch(match, fieldObj.get(), fieldName);
                     }
