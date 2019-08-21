@@ -96,32 +96,38 @@ public class RequiredParamAspect {
                     if (object == null) {
                         throw new BusinessException(CodeEnum.PARAMS_IS_INVALID, "参数:" + argsName[i] + "不能为空对象!!!");
                     }
-                    //字符串
-                    if (object instanceof String) {
-                        checkString(object.toString(), argsName[i]);
-                    }
-                    //基本数据类型以及包装数据类
-                    else if (object instanceof Number) {
-                        checkNumber((Number) object, argsName[i],checkParam);
-                    }
-                    //集合
-                    else if (object instanceof Collection) {
-                        checkCollection((Collection) object, argsName[i], checkParam.attributes());
-                    }
-                    //Map
-                    else if (object instanceof Map) {
-                        checkMap((Map) object, argsName[i], checkParam.attributes());
-                    }
-                    //普通对象
-                    else if (object instanceof Object) {
-                        checkObject(object, argsName[i], checkParam.attributes());
-                    }
+                    resolveCheck(argsName[i], object, checkParam.attributes());
                 } else if (annotation instanceof CheckMatch) {
                     CheckMatch check = (CheckMatch) annotation;
                     doCheckMatch(check, object, argsName[i]);
                 }
             }
         }
+    }
+
+    private void resolveCheck(String argName, Object object, String[] attributes) {
+        //字符串
+        if (object instanceof String) {
+            checkString(object.toString(), argName);
+        }
+        //基本数据类型以及包装数据类
+        else if (object instanceof Number) {
+            checkNumber((Number) object, argName, attributes);
+        }
+
+        //集合
+        else if (object instanceof Collection) {
+            checkCollection((Collection) object, argName, attributes);
+        }
+        //Map
+        else if (object instanceof Map) {
+            checkMap((Map) object, argName, attributes);
+        }
+        //普通对象
+        else if (object instanceof Object) {
+            checkObject(object, argName, attributes);
+        }
+
     }
 
     /**
@@ -134,17 +140,16 @@ public class RequiredParamAspect {
     private void doCheckMatch(CheckMatch check, Object object, String argName) {
         Optional<Object> o = Optional
                 .ofNullable(object);
-        if (check.isMatch()) {
-            o.orElseThrow(() -> new BusinessException(CodeEnum.PARAMS_IS_INVALID, "正则参数:" + argName + "不能为空!!!"));
-        }
         Boolean match;
         if (check.isMatch()) {
+            Object value = o.orElseThrow(() -> new BusinessException(CodeEnum.PARAMS_IS_INVALID, "正则参数:" + argName + "不能为空!!!"));
             String expression = check.expression();
             Map tg = CollUtil.newHashMap();
             tg.put("regex", expression);
-            tg.put("value", o.get());
+            tg.put("value", value);
             match = MatchEnum.MatchRegex.match(tg);
-        } else {
+        }
+        else {
             match = check.matchType().match(o.get());
         }
 
@@ -171,12 +176,11 @@ public class RequiredParamAspect {
      * @param number  基本数据
      * @param argName 参数名
      */
-    private void checkNumber(Number number, String argName,CheckParam param) {
+    private void checkNumber(Number number, String argName, String[] attributes) {
         //啥也不干 也可以校验是否为0
-        String[] attributes = param.attributes();
-        if(attributes.length>0){
+        if (attributes.length > 0) {
             List<String> objects = (List<String>) Convert.toList(attributes);
-            if(!objects.contains(number.toString())){
+            if (!objects.contains(number.toString())) {
                 throw new BusinessException(CodeEnum.PARAMS_IS_INVALID, "参数:" + argName + "范围不合法!!!");
             }
         }
@@ -282,7 +286,7 @@ public class RequiredParamAspect {
                         checkString(o.toString(), fieldName);
                     }
                     if (num) {
-                        checkNumber((Number)o, fieldName,param);
+                        checkNumber((Number) o, fieldName, param.attributes());
                     }
                 }
                 if (match != null) {
