@@ -49,7 +49,7 @@ redisson:
 ########################################
 logging:
   level:
-    com.iweixiao.erudite.repository: debug
+    com.zt.annotion: debug
 
 ---
 server:
