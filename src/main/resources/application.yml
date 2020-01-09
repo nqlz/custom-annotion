@@ -49,7 +49,7 @@ redisson:
 ########################################
 logging:
   level:
-    com.zt.annotion: debug
+    com.zt.annotion.customannotion: debug
 
 ---
 server:

@@ -49,6 +49,10 @@ public class RedissonConfig {
     @Bean("redissonClient")
     @ConditionalOnProperty(name = "redisson.cluster", havingValue = "true")
     public RedissonClient redissonClient() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        return Redisson.create(getClusterConfig());
+    }
+
+    private Config getClusterConfig() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         Config config = new Config();
         config.useClusterServers()
                 .addNodeAddress(redissonProperties.getAddress().split(","))
@@ -74,6 +78,6 @@ public class RedissonConfig {
         if(StringUtils.isNotBlank(redissonProperties.getPassword())) {
             config.useSingleServer().setPassword(redissonProperties.getPassword());
         }
-        return Redisson.create(config);
+        return config;
     }
 }
