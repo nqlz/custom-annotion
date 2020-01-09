@@ -29,8 +29,17 @@ public class ResultJson {
         return returnError(codeEnum.getCode(), codeEnum.getMessage(), null);
     }
 
+    public static ResultJson returnError(Object data) {
+        return returnError(data, "");
+    }
+
+    public static ResultJson returnError(String message) {
+        return returnError("", message);
+    }
+
     /**
      * 封装失败响应信息
+     *
      * @param codeEnum
      * @param message
      * @return
@@ -46,13 +55,15 @@ public class ResultJson {
     public static ResultJson returnError(Integer code, String message) {
         return returnError(code, message, null);
     }
+
     /**
      * 封装失败响应信息
+     *
      * @param code
      * @param message
      * @return
      */
-    public static ResultJson returnError(Integer code,String message, Object data) {
+    public static ResultJson returnError(Integer code, String message, Object data) {
         ResultJson resultJson = new ResultJson();
         resultJson.setStatus(FAIL);
         resultJson.setData(data);
@@ -61,9 +72,18 @@ public class ResultJson {
         return resultJson;
     }
 
+    public static ResultJson returnError(Object data, String message) {
+        ResultJson resultJson = new ResultJson();
+        resultJson.setStatus(FAIL);
+        resultJson.setData(data);
+        resultJson.setMessage(message);
+        return resultJson;
+    }
+
 
     /**
      * 封装成功响应信息
+     *
      * @return
      */
     public static ResultJson returnOK() {
@@ -72,6 +92,7 @@ public class ResultJson {
 
     /**
      * 封装成功响应信息
+     *
      * @param message
      * @return
      */
@@ -81,6 +102,7 @@ public class ResultJson {
 
     /**
      * 封装成功响应信息
+     *
      * @param data
      * @return
      */
@@ -90,6 +112,7 @@ public class ResultJson {
 
     /**
      * 封装成功响应信息
+     *
      * @param data
      * @param message
      * @return
